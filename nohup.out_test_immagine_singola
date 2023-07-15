@@ -1,0 +1,181 @@
+Namespace(cfg='experiments/babypose/w32/w32_4x_reg03_bs10_512_adam_lr1e-3_babypose_x300.yaml', opts=['TEST.MODEL_FILE', 'output/baby_pose_kpt_carbon_image_split/hrnet_dekr/w32_4x_reg03_bs10_512_adam_lr1e-3_babypose_x300/model_best.pth.tar', 'DATASET.MAX_NUM_PEOPLE', '1'])
+AUTO_RESUME: True
+CUDNN:
+  BENCHMARK: True
+  DETERMINISTIC: False
+  ENABLED: True
+DATASET:
+  BG_WEIGHT: 0.1
+  CENTER_SIGMA: 4.0
+  DATASET: baby_pose_kpt
+  DATASET_TEST: baby_pose
+  DATA_FORMAT: no_zip
+  FLIP: 0.5
+  INPUT_SIZE: 384
+  MAX_NUM_PEOPLE: 1
+  MAX_ROTATION: 30
+  MAX_SCALE: 1.5
+  MAX_TRANSLATE: 40
+  MIN_SCALE: 0.75
+  NUM_JOINTS: 14
+  OFFSET_RADIUS: 4
+  OUTPUT_SIZE: 96
+  ROOT: data/babypose
+  SCALE_TYPE: short
+  SIGMA: 2.0
+  TEST: test
+  TRAIN: train
+  VAL: val
+DATA_DIR: 
+DIST_BACKEND: nccl
+GPUS: (0,)
+LOG_DIR: log
+LOSS:
+  HEATMAPS_LOSS_FACTOR: 1.0
+  OFFSETS_LOSS_FACTOR: 0.03
+  WITH_HEATMAPS_LOSS: True
+  WITH_OFFSETS_LOSS: True
+MODEL:
+  INIT_WEIGHTS: True
+  NAME: hrnet_dekr
+  NUM_JOINTS: 14
+  PRETRAINED: model/pose_crowdpose/pose_dekr_hrnetw32_crowdpose.pth
+  SPEC:
+    FINAL_CONV_KERNEL: 1
+    HEAD_HEATMAP:
+      BLOCK: BASIC
+      DILATION_RATE: 1
+      NUM_BLOCKS: 1
+      NUM_CHANNELS: 32
+    HEAD_OFFSET:
+      BLOCK: ADAPTIVE
+      DILATION_RATE: 1
+      NUM_BLOCKS: 2
+      NUM_CHANNELS_PERKPT: 15
+    PRETRAINED_LAYERS: ['*']
+    STAGES:
+      BLOCK: ['BASIC', 'BASIC', 'BASIC']
+      FUSE_METHOD: ['SUM', 'SUM', 'SUM']
+      NUM_BLOCKS: [[4, 4], [4, 4, 4], [4, 4, 4, 4]]
+      NUM_BRANCHES: [2, 3, 4]
+      NUM_CHANNELS: [[32, 64], [32, 64, 128], [32, 64, 128, 256]]
+      NUM_MODULES: [1, 4, 3]
+      NUM_STAGES: 3
+MULTIPROCESSING_DISTRIBUTED: True
+NAME: regression
+OUTPUT_DIR: output
+PIN_MEMORY: True
+PRINT_FREQ: 10
+RANK: 0
+RESCORE:
+  BATCHSIZE: 1024
+  DATA_FILE: data/rescore_data/rescore_dataset_train_coco_kpt
+  END_EPOCH: 20
+  GET_DATA: False
+  HIDDEN_LAYER: 256
+  LR: 0.001
+  MODEL_FILE: model/rescore/final_rescore_baby_pose_kpt.pth
+  VALID: True
+TEST:
+  ADJUST_THRESHOLD: 0.05
+  DECREASE: 0.8
+  FLIP_TEST: True
+  GUASSIAN_KERNEL: 6
+  IMAGES_PER_GPU: 1
+  KEYPOINT_THRESHOLD: 0.01
+  LOG_PROGRESS: True
+  MATCH_HMP: False
+  MAX_ABSORB_DISTANCE: 75
+  MODEL_FILE: output/baby_pose_kpt_carbon_image_split/hrnet_dekr/w32_4x_reg03_bs10_512_adam_lr1e-3_babypose_x300/model_best.pth.tar
+  NMS_NUM_THRE: 7
+  NMS_THRE: 0.05
+  POOL_THRESHOLD1: 300
+  POOL_THRESHOLD2: 200
+  SCALE_FACTOR: [1]
+TRAIN:
+  BEGIN_EPOCH: 0
+  CHECKPOINT: 
+  END_EPOCH: 10
+  GAMMA1: 0.99
+  GAMMA2: 0.0
+  IMAGES_PER_GPU: 7
+  LR: 0.001
+  LR_FACTOR: 0.1
+  LR_STEP: [200, 260]
+  MOMENTUM: 0.9
+  NESTEROV: False
+  OPTIMIZER: adam
+  RESUME: False
+  SHUFFLE: True
+  WD: 0.0001
+VERBOSE: False
+WORKERS: 1
+=> loading model from output/baby_pose_kpt_carbon_image_split/hrnet_dekr/w32_4x_reg03_bs10_512_adam_lr1e-3_babypose_x300/model_best.pth.tar
+=> classes: ['__background__', 'person']
+[codecarbon INFO @ 11:50:35] offline tracker init
+[codecarbon INFO @ 11:50:35] [setup] RAM Tracking...
+[codecarbon INFO @ 11:50:35] [setup] GPU Tracking...
+[codecarbon INFO @ 11:50:35] Tracking Nvidia GPU via pynvml
+[codecarbon INFO @ 11:50:35] [setup] CPU Tracking...
+[codecarbon WARNING @ 11:50:35] No CPU tracking mode found. Falling back on CPU constant mode.
+[codecarbon INFO @ 11:50:37] CPU Model on constant consumption mode: Intel(R) Core(TM) i7-3930K CPU @ 3.20GHz
+[codecarbon INFO @ 11:50:37] >>> Tracker's metadata:
+[codecarbon INFO @ 11:50:37]   Platform system: Linux-5.19.0-46-generic-x86_64-with-glibc2.34
+[codecarbon INFO @ 11:50:37]   Python version: 3.8.16
+[codecarbon INFO @ 11:50:37]   CodeCarbon version: 2.2.4
+[codecarbon INFO @ 11:50:37]   Available RAM : 11.616 GB
+[codecarbon INFO @ 11:50:37]   CPU count: 12
+[codecarbon INFO @ 11:50:37]   CPU model: Intel(R) Core(TM) i7-3930K CPU @ 3.20GHz
+[codecarbon INFO @ 11:50:37]   GPU count: 1
+[codecarbon INFO @ 11:50:37]   GPU model: 1 x NVIDIA GeForce GTX 1060 6GB
+=> creating output/baby_pose_kpt/hrnet_dekr/w32_4x_reg03_bs10_512_adam_lr1e-3_babypose_x300
+=> creating log/baby_pose_kpt/hrnet_dekr/w32_4x_reg03_bs10_512_adam_lr1e-3_babypose_x300_2023-07-08-11-50
+loading annotations into memory...
+Done (t=0.02s)
+creating index...
+index created!
+  0%|          | 0/1 [00:00<?, ?it/s]/home/claudio/.pyenv/versions/3.8.16/lib/python3.8/site-packages/torch/nn/functional.py:3737: UserWarning: nn.functional.upsample is deprecated. Use nn.functional.interpolate instead.
+  warnings.warn("nn.functional.upsample is deprecated. Use nn.functional.interpolate instead.")
+/home/claudio/.pyenv/versions/3.8.16/lib/python3.8/site-packages/torch/functional.py:504: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3483.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+100%|██████████| 1/1 [00:01<00:00,  1.53s/it]100%|██████████| 1/1 [00:01<00:00,  1.53s/it]
+=> Writing results json to output/baby_pose_kpt/hrnet_dekr/w32_4x_reg03_bs10_512_adam_lr1e-3_babypose_x300/results/keypoints_testregression_results.json
+| Arch | AP | Ap .5 | AP .75 | AR | AR .5 | AR .75 | AP (easy) | AP (medium) | AP (hard) |
+|---|---|---|---|---|---|---|---|---|---|
+| hrnet_dekr | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | -1.000 | -1.000 |
+****************************************************
+  Valori medi totali
+left_arm  : 0.992
+right_arm : 0.989
+left_leg  : 0.993
+right_leg : 0.994
+Total     : 0.992
+[codecarbon INFO @ 11:50:39] Energy consumed for RAM : 0.000002 kWh. RAM Power : 4.355958938598633 W
+[codecarbon INFO @ 11:50:39] Energy consumed for all GPUs : 0.000015 kWh. Total GPU Power : 34.698 W
+[codecarbon INFO @ 11:50:39] Energy consumed for all CPUs : 0.000029 kWh. Total CPU Power : 65.0 W
+[codecarbon INFO @ 11:50:39] 0.000046 kWh of electricity used since the beginning.
+Testing regression
+Loading and preparing results...
+DONE (t=0.00s)
+creating index...
+index created!
+Running per image evaluation...
+Evaluate annotation type *keypoints*
+DONE (t=0.00s).
+Accumulating evaluation results...
+DONE (t=0.00s).
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets= 20 ] = 1.000
+ Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets= 20 ] = 1.000
+ Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets= 20 ] = 1.000
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 20 ] = 1.000
+ Average Recall     (AR) @[ IoU=0.50      | area=   all | maxDets= 20 ] = 1.000
+ Average Recall     (AR) @[ IoU=0.75      | area=   all | maxDets= 20 ] = 1.000
+ Average Recall     (AR) @[ IoU=0.50:0.95 | type=  easy | maxDets= 20 ] = 1.000
+ Average Recall     (AR) @[ IoU=0.50:0.95 | type=medium | maxDets= 20 ] = -1.000
+ Average Recall     (AR) @[ IoU=0.50:0.95 | type=  hard | maxDets= 20 ] = -1.000
+Predizioni per immagine: 602546
+left_arm  : 0.992
+right_arm : 0.989
+left_leg  : 0.993
+right_leg : 0.994
+-----------------------------------------------------------------
